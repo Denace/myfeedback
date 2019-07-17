@@ -114,10 +114,7 @@
     function save_comment($k,$c){
         try{
             $conn=OpenCon();
-            $sql="INSERT INTO comment (c_id,u_id,feedback)VALUES (NULL,$k,$c)";  
-            //$query="SELECT * FROM `comment`";
-                    /*('1', 'dkieme@chaitrading.com', 'I am dennis'),('2', 'kiemeden@gmail.com', 'I am denace!')*/ 
-            //var_dump($conn);
+            $sql="INSERT INTO comment (`u_id`,`feedback`)VALUES ('$k','$c')";  
             if($conn->query($sql))
                 echo "feedback sent!";
             else {
