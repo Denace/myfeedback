@@ -144,6 +144,13 @@
                 </div>
             </form>
         </div> 
+        <div class="col-md-5">
+            <h2 class="display-3" id="com">comments section</h2>
+            <div>
+                   <!-- <input type="submit" name="fetchComments" class="submit-button" value="Fetch Comments" formmethod="POST" formaction="index.php"/>  -->         
+            </div>
+            <div id="comments"></div>
+        </div>
     </div> 
     <div class="row justify-content-center"> 
         <address id="address">
@@ -165,14 +172,19 @@
     
 
     if(isset($email,$comments)){
-        save_comment($email,$comments);
+        save_comment($name,$email,$comments);
         get_comments();
     }
+    /*
+        if(isset($_POST['fetchComments'])){
+            get_comments();
+        }
+     */
 
-    function save_comment($k,$c){
+    function save_comment($n,$k,$c){
         try{
             $conn=OpenCon();
-            $sql="INSERT INTO comment (`u_id`,`feedback`)VALUES ('$k','$c')";  
+            $sql="INSERT INTO comment (`name`,`u_id`,`feedback`)VALUES ('$n','$k','$c')";  
             if($conn->query($sql))
                 echo "feedback sent!";
             else {
@@ -193,7 +205,21 @@
         $sql="select * from comment";
         $result=$conn->query($sql);
         while($row=$result->fetch_assoc()){
-            echo $row['u_id']." --- commented----> ".$row['feedback'];
+            //echo $row['u_id']." --- commented----> ".$row['feedback'];
+            ?>
+            <script>
+               var x=<?php echo json_encode($row);?>;
+               $(x).each(function(){
+                   $("#comments").append($("<ul class='list-group  list-group-item'></ul>")
+                                        .append("<li>"+"<span>"+'Who:'+"</span>"+x.name+"</li>")
+                                        .append("<li>"+"<span>"+'email:'+"</span>"+x.u_id+"</li>")
+                                        .append("<li>"+"<span>"+'they said:'+"</span>"+x.feedback+"</li>")
+                                     )        
+               });
+
+            </script>
+            <?
+
         }
 
     }
